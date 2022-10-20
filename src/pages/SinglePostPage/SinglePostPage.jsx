@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Outlet, Link, useLocation } from 'react-router-dom';
 import { getPostById } from 'shared/api/posts';
-import Loader from '../../shared/components/Loader/Loader'
+import Loader from '../../shared/components/Loader/Loader';
+
 
 export default function SinglePostPage() {
     const [state, setState] = useState(null);
@@ -11,6 +12,11 @@ export default function SinglePostPage() {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from ?? "/posts"
+    // console.log("gggg", location);
+    console.log("fromJJJJJJJJJJJJJJJJJJJJJJJJJJJ", from)
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -29,8 +35,12 @@ export default function SinglePostPage() {
         fetchPost();
     }, [id])
 
-    const goBack = () => navigate(-1);
+    const goBack = () => navigate(from);
     const goPosts = () => navigate('/posts')
+
+    const isCommentsPage = location.pathname.includes("comments");
+    const commentsLink = isCommentsPage ? `/posts/${id}` : `/posts/${id}/comments`
+
     return (
         <div className='container'>
             <button onClick={goBack}>Go back</button>
@@ -41,6 +51,8 @@ export default function SinglePostPage() {
                 <>
                     <h1 className="page-title">{state.title}</h1>
                     <p>{state.body}</p>
+                    <Link state={{ from }} to={commentsLink}>Comments</Link>
+                    <Outlet />
                 </>
             )}
         </div>

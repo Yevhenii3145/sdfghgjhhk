@@ -30,3 +30,8 @@ export const searchPosts = async (q, _page = 1) => {
   });
   return data;
 };
+
+export const getCommentsById = async id => {
+  const { data } = await instance.get(`/${id}/comments`);
+  return data;
+};

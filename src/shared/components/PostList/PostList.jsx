@@ -1,10 +1,11 @@
 import styles from "./post-list.module.scss";
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
-const PostList = ({items}) => {
-    const elements = items.map(({ id, title },idex) => (<li key={idex} className={styles.item}>
-            <Link to={`/posts/${id}`}>{title}</Link>
-        </li>));
+const PostList = ({ items }) => {
+    const location = useLocation();
+    const elements = items.map(({ id, title }, idex) => (<li key={idex} className={styles.item}>
+        <Link state={{ from: location }} to={`/posts/${id}`}>{title}</Link>
+    </li>));
 
     return <ul className={styles.list}>{elements}</ul>
 }
